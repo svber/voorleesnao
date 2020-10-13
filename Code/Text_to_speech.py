@@ -82,7 +82,9 @@ class Speech:
         engine.runAndWait()
     
     def save_voice(self):
-        pass
+        engine = pyt.init()
+        engine.save_to_file("Audio record", "../Output/Voice.mp3")
+        engine.runAndWait()
         
 path = "../Data/image3"
 image = Image(path)
@@ -96,9 +98,8 @@ print(speech.rate)
 print(speech.volume)
 print(speech.voice)
 speech.generate_speech(150, 1.0, False)
+speech.save_voice()
 
-
-
-lang = detect("Ein, zwei, drei, vier")
+lang = detect("Dziewczyna")
 print(lang)
     
