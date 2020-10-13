@@ -5,6 +5,8 @@ Created on Tue Oct 13 13:08:03 2020
 @author: svber
 """
 import cv2
+from Text_to_speech import Speech
+import pytesseract
 
 def Update(value):
     global ImageBin
@@ -23,8 +25,9 @@ Image = cv2.imread('../data/image1.jpg')
 
 cv2.imshow('Fenetre',Image)
 
-pt.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-text = pt.image_to_string(opening)
+cv2.waitKey(0)
+pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+text = pytesseract.image_to_string(ImageBin)
 
 speech = Speech(text)
 speech.generate_speech(150, 1.0, False)
