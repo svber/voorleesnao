@@ -17,7 +17,7 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
 if __name__ == "__main__":
-    app = 0 # lost Kernal died probeem op bij herhaald opstarten
+    app = 0
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
     window.show()
