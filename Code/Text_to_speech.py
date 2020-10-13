@@ -84,11 +84,19 @@ class Speech:
     def save_voice(self):
         pass
         
-path = "../Data/image3"
+    
+pt.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+img = cv2.imread('../data/stop.jpg')
+text = pt.image_to_string(img)
+speech = Speech(text)
+speech.generate_speech(150, 1.0, False)
+    
+    
+path = "../Data/image1"
 image = Image(path)
 print(image.image_shape)
 image.show_image()
-image.get_text()
+print(image.get_text())
 
 text = "I will speak this text"
 speech = Speech(text)
