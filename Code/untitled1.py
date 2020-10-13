@@ -4,15 +4,32 @@ Created on Tue Oct 13 13:08:03 2020
 
 @author: svber
 """
-import matplotlib.pyplot as plt
-import pytesseract
 import cv2
-import pyttsx3 as tts
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-img = cv2.imread('../data/image1.jpg')
-text = pytesseract.image_to_string(img)
+def Update(value):
+    global ImageBin
+    print (value)
+    ImageBin = cv2.threshold(Image,value,255,cv2.THRESH_BINARY)[1]
+    cv2.imshow('Fenetre',ImageBin)
+
+# window
+cv2.namedWindow('Fenetre',cv2.WINDOW_GUI_NORMAL)
+
+# Trackbar 
+Slider = cv2.createTrackbar('Threshold','Fenetre',0,255,Update)
+
+# Open image
+Image = cv2.imread('../data/image1.jpg')
+
+cv2.imshow('Fenetre',Image)
+
+pt.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+text = pt.image_to_string(opening)
+
 speech = Speech(text)
 speech.generate_speech(150, 1.0, False)
-plt.imshow(img)
-print(text)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+

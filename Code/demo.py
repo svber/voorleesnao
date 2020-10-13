@@ -70,11 +70,5 @@ canny = canny(thresh)
 #cv2.imshow('canny',img)
 
 
-h, w, c = img.shape
-boxes = pytesseract.image_to_boxes(img) 
-for b in boxes.splitlines():
-    b = b.split(' ')
-    img = cv2.rectangle(img, (int(b[1]), h - int(b[2])), (int(b[3]), h - int(b[4])), (0, 255, 0), 2)
-#v2.imshow('box',img)
-plt.imshow(img)
+
 
