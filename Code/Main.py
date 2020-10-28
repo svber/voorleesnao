@@ -6,45 +6,51 @@ Created on Tue Oct 13 14:40:32 2020
 """
 
 import sys
-from PyQt5 import QtWidgets, uic
-import cv2
-import pytesseract
-from Text_to_speech import Speech
+from PyQt5 import QtWidgets, uic, QtGui
+from Text_to_speech import Image, Speech
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType("../Data/Main.ui")
-
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
         super(MyApp, self).__init__()
         self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-        self.ui.Start.clicked.connect(startReading)
-        self.ui.Thresh_slider.valueChanged.connect(threshhold_img)
-        self.ui.Voice_choice.currentIndexChanged.connect()
-        global Image
-        Image = cv2.imread('../data/image1.jpg')
+        self.ui.setupUi(self)   
+        self.ui.btnStart.clicked.connect(self.btnStartClicked)
 
-def startReading(self):
-    pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    text = pytesseract.image_to_string(thresh)
-    speech = Speech(text)
-    speech.generate_speech(150, 1.0, False)
-    
-def threshhold_img(value):
-     global thresh
-     thresh = cv2.threshold(Image,value,255,cv2.THRESH_BINARY)[1]
-     
-def voice_changed(value):
-    global voice_int
-    voice_int = value
-    
-def volume_changed(self):
-    global volume
-    
-def speed_changed(self):
-    global speed
+    def btnStartClicked(self):
+        photo = str(self.ui.cbImage.currentText())
+        if photo == "Image1":
+            path = "../Data/image1"
+        elif photo == "Image2":
+            path = "../Data/image2"
+        elif photo == "Image3":
+            path = "../Data/image3"
 
+        pixmap = QtGui.QPixmap(path)
+        self.ui.lblPhoto.setPixmap(pixmap)
+        self.ui.lblPhoto.setScaledContents(True) 
+        QtWidgets.QApplication.processEvents()
+        
+        image = Image(path)
+        text = image.get_text()
+        speech = Speech(text)
+        
+        voice = str(self.ui.cbVoice.currentText())
+        if voice == "Female":
+            gender = 1
+        else:
+            gender = 0
+                
+        volume = int(self.ui.sbVolume.value())
+        scaled_volume = 1 / 20 * volume
+           
+        speed = int(self.ui.sbSpeed.value()) 
+        scaled_speed = speed * 10
+        
+        speech.generate_speech(gender, scaled_volume, scaled_speed)
+        image.create_pdf()
+        speech.save_voice()
 
 if __name__ == "__main__":
     app = 0

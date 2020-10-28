@@ -8,8 +8,8 @@ Created on Mon Oct 12 22:32:58 2020
 import cv2
 import matplotlib.pyplot as plt
 import pytesseract as pt
-from PIL import Image as Img
 import pyttsx3 as pyt
+from fpdf import FPDF
 
 class Image:
     def __init__(self, path):
@@ -31,12 +31,16 @@ class Image:
     
     def get_text(self):
         pt.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-        image = Img.open(self._path + ".jpg")
-        pt.image_to_string(image)
+        image = cv2.imread(self._path + ".jpg")
+        text = pt.image_to_string(image)
+        return text
 
-    def clean_image(self):
-        # filter noise out of image        
-        pass
+    def create_pdf(self):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size = 12)
+        pdf.cell(200, 10, txt = self.get_text(), ln = 1, align = "C")
+        pdf.output("../Output/Text.pdf")
 
 class Speech:
     def __init__(self, text):
@@ -47,11 +51,11 @@ class Speech:
         return self._text
     
     @property
-    def rate(self):
+    def voice(self):
         engine = pyt.init()
-        rate = engine.getProperty('rate')
-        return rate 
-  
+        voices = engine.getProperty('voices')
+        return voices
+    
     @property
     def volume(self):
         engine = pyt.init()
@@ -59,28 +63,28 @@ class Speech:
         return volume
     
     @property
-    def voice(self):
+    def speed(self):
         engine = pyt.init()
-        voices = engine.getProperty('voices')
-        return voices
-    
-    def change_speech(self, rate = int, volume = float, voice = bool, lang = None):
+        rate = engine.getProperty('rate')
+        return rate 
+        
+    def change_speech(self, voice = bool, volume = float, speed = int):
         engine = pyt.init()
         voices = self.voice
-        engine.setProperty('rate', rate)
-        engine.setProperty('volume', volume)
         if voice == True:
             engine.setProperty('voice', voices[1].id)
         else:
-             engine.setProperty('voice', voices[0].id)
+             engine.setProperty('voice', voices[0].id) 
+        engine.setProperty('volume', volume)
+        engine.setProperty('rate', speed)
     
-    def generate_speech(self, rate = int, volume = float, voice = bool):
+    def generate_speech(self, voice = bool, volume = float, speed = int):
         engine = pyt.init()
-        self.change_speech(rate, volume, voice)
+        self.change_speech(voice, volume, speed)
         engine.say(self._text)
         engine.runAndWait()
-    
+        
     def save_voice(self):
         engine = pyt.init()
-        engine.save_to_file("Audio record", "../Output/Voice.mp3")
+        engine.save_to_file(self._text, "../Output/Voice.mp3")
         engine.runAndWait()

@@ -13,7 +13,6 @@ import pyttsx3 as pyt
 from langdetect import detect
 import numpy as np
 
-
 class Image:
     def __init__(self, path):
         self._path = path
@@ -87,8 +86,7 @@ class Speech:
         engine = pyt.init()
         engine.save_to_file("Audio record", "../Output/Voice.mp3")
         engine.runAndWait()
-        
-    
+           
 pt.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 img = cv2.imread('../data/image1.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
